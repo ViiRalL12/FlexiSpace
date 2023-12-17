@@ -55,7 +55,7 @@ const Listings = ({ listings: items, refresh, category }: Props) => {
           <Text style={{ fontFamily: 'mon' }}>{item.room_type}</Text>
           <View style={{ flexDirection: 'row', gap: 4 }}>
             <Text style={{ fontFamily: 'mon-sb' }}>€ {item.price}</Text>
-            <Text style={{ fontFamily: 'mon' }}>night</Text>
+            <Text style={{ fontFamily: 'mon' }}>per hour</Text>
           </View>
         </Animated.View>
       </TouchableOpacity>

@@ -15,10 +15,14 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { Link } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { useRouter } from 'expo-router'; // Import useRouter
+
 
 const Page = () => {
   const { signOut, isSignedIn } = useAuth();
   const { user } = useUser();
+  const router = useRouter(); // Use useRouter hook
+
   const [firstName, setFirstName] = useState(user?.firstName);
   const [lastName, setLastName] = useState(user?.lastName);
   const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress);
@@ -34,6 +38,13 @@ const Page = () => {
     setLastName(user.lastName);
     setEmail(user.emailAddresses[0].emailAddress);
   }, [user]);
+
+  // Automatically open login modal if user is not authenticated
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.push('/(modals)/login');
+    }
+  }, [isSignedIn, router]);
 
   // Update Clerk user data
   const onSaveUser = async () => {
@@ -115,12 +126,8 @@ const Page = () => {
         </View>
       )}
 
-      {isSignedIn && <Button title="Log Out" onPress={() => signOut()} color={Colors.dark} />}
-      {!isSignedIn && (
-        <Link href={'/(modals)/login'} asChild>
-          <Button title="Log In" color={Colors.dark} />
-        </Link>
-      )}
+      {isSignedIn && <Button title="Log Out" onPress={() => signOut()} />}
+      
     </SafeAreaView>
   );
 };

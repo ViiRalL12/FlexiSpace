@@ -76,7 +76,22 @@ function RootLayoutNav() {
         name="(modals)/login"
         options={{
           presentation: 'modal',
-          title: 'Log in or sign up',
+          title: 'Flexispace',
+          headerTitleStyle: {
+            fontFamily: 'mon-sb',
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="(modals)/signup"
+        options={{
+          presentation: 'modal',
+          title: 'Flexispace',
           headerTitleStyle: {
             fontFamily: 'mon-sb',
           },

@@ -5,8 +5,7 @@ import { useRouter } from 'expo-router';
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useWarmUpBrowser } from '@/hooks/useWarmUpBrowser';
 import { defaultStyles } from '@/constants/Styles';
-import LoginScreen from '@/screens/LoginScreen';
-
+import RegistrationScreen from '@/screens/RegisterScreen';
 
 enum Strategy {
   Google = 'oauth_google',
@@ -42,49 +41,49 @@ const Page = () => {
 
   
 
-  return (
-    <ScrollView>
+  return (      
+  
+  <ScrollView>
+    <View style={styles.container}>
 
-      <View style={styles.container}>
+      <RegistrationScreen router={router} />
 
-        <LoginScreen router={router} />
-
-        <View style={styles.seperatorView}>
-          <View
-            style={{
-              flex: 1,
-              borderBottomColor: 'black',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
-          <Text style={styles.seperator}>or</Text>
-          <View
-            style={{
-              flex: 1,
-              borderBottomColor: 'black',
-              borderBottomWidth: StyleSheet.hairlineWidth,
-            }}
-          />
-        </View>
-
-        <View style={{ gap: 15 }}>
-
-          <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Apple)}>
-            <Ionicons name="md-logo-apple" size={24} style={defaultStyles.btnIcon} />
-            <Text style={styles.btnOutlineText}>Continue with Apple</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Google)}>
-            <Ionicons name="md-logo-google" size={24} style={defaultStyles.btnIcon} />
-            <Text style={styles.btnOutlineText}>Continue with Google</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Facebook)}>
-            <Ionicons name="md-logo-facebook" size={24} style={defaultStyles.btnIcon} />
-            <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.seperatorView}>
+        <View
+          style={{
+            flex: 1,
+            borderBottomColor: 'black',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        />
+        <Text style={styles.seperator}>or</Text>
+        <View
+          style={{
+            flex: 1,
+            borderBottomColor: 'black',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+          }}
+        />
       </View>
+
+      <View style={{ gap: 15 }}>
+
+        <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Apple)}>
+          <Ionicons name="md-logo-apple" size={24} style={defaultStyles.btnIcon} />
+          <Text style={styles.btnOutlineText}>Continue with Apple</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Google)}>
+          <Ionicons name="md-logo-google" size={24} style={defaultStyles.btnIcon} />
+          <Text style={styles.btnOutlineText}>Continue with Google</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Facebook)}>
+          <Ionicons name="md-logo-facebook" size={24} style={defaultStyles.btnIcon} />
+          <Text style={styles.btnOutlineText}>Continue with Facebook</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
     </ScrollView>
   );
 };
