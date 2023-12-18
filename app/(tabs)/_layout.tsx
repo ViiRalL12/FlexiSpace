@@ -29,22 +29,7 @@ const Layout = () => {
           ),
         }}
       />
-      <Tabs.Screen
-        name="trips"
-        options={{
-          tabBarLabel: 'Places',
-          tabBarIcon: ({ size, color }) => <Logo size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="inbox"
-        options={{
-          tabBarLabel: 'Inbox',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="message-outline" size={size} color={color} />
-          ),
-        }}
-      />
+      
       <Tabs.Screen
         name="profile"
         options={{

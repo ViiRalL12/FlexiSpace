@@ -8,44 +8,43 @@ import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
 import { useRouter } from 'expo-router';
+import { useCoordinates } from '@/components/CoordinatesContext';
 // @ts-ignore
-import DatePicker from 'react-native-modern-datepicker';
-
+import axios from "axios"
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const guestsGropus = [
-  {
-    name: 'Adults',
-    text: 'Ages 13 or above',
-    count: 0,
-  },
-  {
-    name: 'Children',
-    text: 'Ages 2-12',
-    count: 0,
-  },
-  {
-    name: 'Infants',
-    text: 'Under 2',
-    count: 0,
-  },
-  {
-    name: 'Pets',
-    text: 'Pets allowed',
-    count: 0,
-  },
-];
+
 
 const Page = () => {
   const [openCard, setOpenCard] = useState(0);
-  const [selectedPlace, setSelectedPlace] = useState(0);
+  
+  const [searchText, setSearchText] = useState('');
 
-  const [groups, setGroups] = useState(guestsGropus);
   const router = useRouter();
-  const today = new Date().toISOString().substring(0, 10);
+
+  const { setCoordinates } = useCoordinates();
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${searchText}`);
+      if (response.data && response.data.length > 0) {
+        const location = response.data[0]; // Cluj-Napoca
+        setCoordinates({
+          latitude: parseFloat(location.lat),
+          longitude: parseFloat(location.lon)
+        });
+        // Aici puteți adăuga logica pentru a actualiza harta
+        router.back()
+      } else {
+        console.log("Locație negăsită");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const onClearAll = () => {
-    setSelectedPlace(0);
     setOpenCard(0);
   };
 
@@ -72,6 +71,8 @@ const Page = () => {
                 style={styles.inputField}
                 placeholder="Search places"
                 placeholderTextColor={Colors.grey}
+                value={searchText}
+                 onChangeText={setSearchText}
               />
             </View>
 
@@ -81,7 +82,7 @@ const Page = () => {
       </View>
 
       {/* When */}
-      <View style={styles.card}>
+      {/* <View style={styles.card}>
         {openCard != 1 && (
           <AnimatedTouchableOpacity
             onPress={() => setOpenCard(1)}
@@ -110,10 +111,10 @@ const Page = () => {
             />
           </Animated.View>
         )}
-      </View>
+      </View> */}
 
       {/* Guests */}
-      <View style={styles.card}>
+      {/* <View style={styles.card}>
         {openCard != 2 && (
           <AnimatedTouchableOpacity
             onPress={() => setOpenCard(2)}
@@ -186,7 +187,7 @@ const Page = () => {
             ))}
           </Animated.View>
         )}
-      </View>
+      </View> */}
 
       {/* Footer */}
       <Animated.View style={defaultStyles.footer} entering={SlideInDown.delay(200)}>
@@ -207,7 +208,7 @@ const Page = () => {
 
           <TouchableOpacity
             style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 50 }]}
-            onPress={() => router.back()}>
+            onPress={handleSearch}>
             <Ionicons
               name="search-outline"
               size={24}

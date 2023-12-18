@@ -12,6 +12,10 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated';
 import { defaultStyles } from '@/constants/Styles';
+import { useUser } from '@clerk/clerk-expo';
+
+import * as MailComposer from 'expo-mail-composer';
+
 
 const { width } = Dimensions.get('window');
 const IMG_HEIGHT = 300;
@@ -21,6 +25,9 @@ const DetailsPage = () => {
   const listing = (listingsData as any[]).find((item) => item.id === id);
   const navigation = useNavigation();
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const { user } = useUser();
+  const userEmail = user?.emailAddresses[0].emailAddress;
+  
 
   const shareListing = async () => {
     try {
@@ -31,6 +38,14 @@ const DetailsPage = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const sendEmail = () => {
+    MailComposer.composeAsync({
+      recipients: ['sebastian.marginean02@e-uvt.ro'],
+      subject: `Reservation for ${listing.name} from ${userEmail}`,
+      body: `Hello, I would like to reserve this listing with id ${listing.id}`,
+    });
   };
 
   useLayoutEffect(() => {
@@ -108,7 +123,7 @@ const DetailsPage = () => {
           <View style={{ flexDirection: 'row', gap: 4 }}>
             <Ionicons name="star" size={16} />
             <Text style={styles.ratings}>
-              {listing.review_scores_rating / 20} · {listing.number_of_reviews} reviews
+              {listing.review_scores_rating / 20}
             </Text>
           </View>
           <View style={styles.divider} />
@@ -135,10 +150,7 @@ const DetailsPage = () => {
             <Text style={styles.footerPrice}>€{listing.price}</Text>
             <Text>per hour</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.footerText}>
-            <Text>Send a message</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
+          <TouchableOpacity onPress={sendEmail} style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
             <Text style={defaultStyles.btnText}>Reserve</Text>
           </TouchableOpacity>
         </View>

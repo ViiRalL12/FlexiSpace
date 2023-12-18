@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { Link } from 'expo-router';
+import { useGlobalContext } from './GlobalContext';
 
 const categories = [
   {
@@ -31,9 +32,13 @@ const ExploreHeader = ({ onCategoryChanged }: Props) => {
   const scrollRef = useRef<ScrollView>(null);
   const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { setSelectedCategory } = useGlobalContext();
 
   const selectCategory = (index: number) => {
     const selected = itemsRef.current[index];
+    const category = categories[index].name;
+    setSelectedCategory(category); // Update the global state
+    onCategoryChanged(category); // Call the passed-in callback (if needed)
     setActiveIndex(index);
     selected?.measure((x) => {
       scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true });
@@ -42,6 +47,7 @@ const ExploreHeader = ({ onCategoryChanged }: Props) => {
     onCategoryChanged(categories[index].name);
   };
 
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
@@ -57,9 +63,6 @@ const ExploreHeader = ({ onCategoryChanged }: Props) => {
               </View>
             </TouchableOpacity>
           </Link>
-          <TouchableOpacity style={styles.filterBtn}>
-            <Ionicons name="options-outline" size={24} />
-          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 14,
     alignItems: 'center',
-    width: 280,
+    width: 340,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#c2c2c2',
     borderRadius: 30,

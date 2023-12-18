@@ -7,6 +7,10 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import ModalHeaderText from '@/components/ModalHeaderText';
 import { TouchableOpacity } from 'react-native';
+import React from 'react';
+import { GlobalProvider } from '@/components/GlobalContext';
+import { CoordinatesProvider } from '@/components/CoordinatesContext';
+
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 // Cache the Clerk JWT
@@ -53,9 +57,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
-      <RootLayoutNav />
-    </ClerkProvider>
+    <CoordinatesProvider>
+      <GlobalProvider>
+        <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+          <RootLayoutNav />
+        </ClerkProvider>
+      </GlobalProvider>
+    </CoordinatesProvider>
   );
 }
 

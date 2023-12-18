@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import * as Location from 'expo-location';
+import { useCoordinates } from './CoordinatesContext';
 
 interface Props {
   listings: any;
@@ -22,11 +23,24 @@ const INITIAL_REGION = {
 const ListingsMap = memo(({ listings }: Props) => {
   const router = useRouter();
   const mapRef = useRef<any>(null);
+  const { coordinates } = useCoordinates();
 
   // When the component mounts, locate the user
   useEffect(() => {
     onLocateMe();
   }, []);
+
+  useEffect(() => {
+    if (coordinates) {
+      const region = {
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      };
+      mapRef.current?.animateToRegion(region, 1000); // Animate to new region
+    }
+  }, [coordinates]);
 
   // When a marker is selected, navigate to the listing page
   const onMarkerSelected = (event: any) => {
@@ -91,7 +105,7 @@ const ListingsMap = memo(({ listings }: Props) => {
         clusterFontFamily="mon-sb"
         renderCluster={renderCluster}>
         {/* Render all our marker as usual */}
-        {listings.features.map((item: any) => (
+        {listings.map((item: any) => (
           <Marker
             coordinate={{
               latitude: item.properties.latitude,
